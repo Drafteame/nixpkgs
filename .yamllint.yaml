@@ -1,0 +1,21 @@
+extends: default
+
+rules:
+  line-length:
+    max: 200
+    level: warning
+  document-start: disable
+  truthy:
+    # GitHub Actions uses `on:` as a top-level key which yamllint flags by default.
+    check-keys: false
+  comments:
+    min-spaces-from-content: 1
+  comments-indentation: disable
+  indentation:
+    spaces: 2
+    indent-sequences: consistent
+
+ignore: |
+  .direnv/
+  result
+  result-*

@@ -1,0 +1,102 @@
+name: Release
+
+# Auto-release on every push to main. Mirrors backend-ci's release flow:
+# commitizen bumps the version + writes a changelog increment, then
+# softprops/action-gh-release publishes a GitHub release.
+# Skips its own follow-up bump commit so the workflow doesn't recurse.
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  actions: write  # required by cache-nix-action's post-step in configure-nix
+
+env:
+  GIT_USER_EMAIL: ${{ secrets.GIT_EMAIL }}
+  GIT_USER_NAME: ${{ secrets.GIT_NAME }}
+
+jobs:
+  bump_version:
+    if: "!startsWith(github.event.head_commit.message, 'bump:')"
+    runs-on: blacksmith-2vcpu-ubuntu-2204
+    name: Bump version
+    outputs:
+      bumped: ${{ steps.cz.outputs.bumped }}
+      version: ${{ steps.cz.outputs.version-tag }}
+      major: ${{ steps.cz.outputs.major }}
+    steps:
+      - name: Checkout
+        uses: useblacksmith/checkout@v1
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.ACCESS_TOKEN }}
+          ref: main
+
+      - name: Allow nix to fetch private backend-ci flake input
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        run: |
+          git config --global url."https://x-access-token:${ACCESS_TOKEN}@github.com/".insteadOf "ssh://git@github.com/"
+
+      - name: Configure Nix
+        uses: Drafteame/backend-ci/.github/actions/configure-nix@v0.8.0
+
+      - id: cz
+        name: Create bump and changelog
+        uses: Drafteame/backend-ci/.github/actions/cz-bump@v0.8.0
+        with:
+          branch: main
+          git-name: ${{ secrets.GIT_NAME }}
+          git-email: ${{ secrets.GIT_EMAIL }}
+          changelog-increment-filename: body.md
+          devshell: ci-deploy
+
+      - name: Trim release body
+        if: steps.cz.outputs.bumped == 'true'
+        run: |
+          if [ -f body.md ] && [ "$(wc -c < body.md)" -gt 125000 ]; then
+            head -c 125000 body.md > body.md.trimmed
+            mv body.md.trimmed body.md
+          fi
+
+      - name: Publish GitHub release
+        if: steps.cz.outputs.bumped == 'true'
+        uses: softprops/action-gh-release@v3
+        with:
+          body_path: body.md
+          tag_name: ${{ steps.cz.outputs.version-tag }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          make_latest: "true"
+
+      - name: Print version
+        if: steps.cz.outputs.bumped == 'true'
+        run: echo "Released ${{ steps.cz.outputs.version-tag }}"
+
+  update_major_tag:
+    name: Move floating v${{ needs.bump_version.outputs.major }} tag
+    runs-on: blacksmith-2vcpu-ubuntu-2204
+    needs: bump_version
+    if: needs.bump_version.outputs.bumped == 'true'
+    steps:
+      - name: Checkout
+        uses: useblacksmith/checkout@v1
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.ACCESS_TOKEN }}
+          ref: main
+
+      - name: Force-push v<major> to the new release
+        env:
+          TAG_NAME: ${{ needs.bump_version.outputs.version }}
+          MAJOR: ${{ needs.bump_version.outputs.major }}
+        run: |
+          set -euo pipefail
+          git config user.name "${GIT_USER_NAME:-github-actions[bot]}"
+          git config user.email "${GIT_USER_EMAIL:-41898282+github-actions[bot]@users.noreply.github.com}"
+
+          floating="v${MAJOR}"
+          git tag -f "${floating}" "${TAG_NAME}"
+          git push origin "${floating}" --force
+          echo "Moved ${floating} -> ${TAG_NAME}"

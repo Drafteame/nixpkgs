@@ -1,0 +1,77 @@
+# Pre-commit hooks for nixpkgs.
+#
+# All hooks use `language: system` so they run the binaries provided by the
+# nix dev shell — versions stay pinned to the flake instead of pre-commit's
+# own repo refs.
+#
+# Install via `pre-commit install --hook-type pre-commit --hook-type commit-msg`
+# (the dev shellHook does this automatically when entering `nix develop`).
+
+default_install_hook_types: [pre-commit, commit-msg]
+default_stages: [pre-commit]
+
+exclude: |
+  (?x)^(
+    CHANGELOG\.md|
+    \.direnv/.*|
+    result|
+    result-.*
+  )$
+
+repos:
+  - repo: local
+    hooks:
+      - id: nixpkgs-fmt
+        name: nixpkgs-fmt
+        language: system
+        entry: nixpkgs-fmt --check
+        files: \.nix$
+
+      - id: statix
+        name: statix (nix lint)
+        language: system
+        entry: statix check
+        files: \.nix$
+        pass_filenames: false
+
+      - id: deadnix
+        name: deadnix
+        language: system
+        entry: deadnix --fail
+        files: \.nix$
+
+      - id: shellcheck
+        name: shellcheck (bash)
+        language: system
+        entry: shellcheck --source-path=SCRIPTDIR -x
+        types: [shell]
+
+      - id: shfmt
+        name: shfmt (bash format)
+        language: system
+        entry: shfmt -i 2 -ci -d
+        types: [shell]
+
+      - id: yamllint
+        name: yamllint
+        language: system
+        entry: yamllint -s
+        types: [yaml]
+
+      - id: markdownlint
+        name: markdownlint
+        language: system
+        entry: markdownlint-cli2
+        files: \.md$
+
+      - id: gitleaks
+        name: gitleaks (secret scan)
+        language: system
+        entry: gitleaks protect --staged --redact --verbose
+        pass_filenames: false
+
+      - id: commitizen
+        name: commitizen (commit message)
+        language: system
+        stages: [commit-msg]
+        entry: cz check --commit-msg-file
