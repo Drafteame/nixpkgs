@@ -17,5 +17,6 @@ rules:
 
 ignore: |
   .direnv/
+  .backend-ci/
   result
   result-*

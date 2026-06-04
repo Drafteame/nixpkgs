@@ -34,6 +34,20 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
           ref: main
 
+      # `Drafteame/backend-ci` is private; the auto-injected GITHUB_TOKEN of
+      # this public repo can't resolve its composite actions. Check the repo
+      # out into the workspace with an org-scoped PAT and reference the
+      # actions via local paths instead of `org/repo@ref`.
+      - name: Checkout backend-ci actions
+        uses: useblacksmith/checkout@v1
+        with:
+          repository: Drafteame/backend-ci
+          ref: v0.8.0
+          token: ${{ secrets.ACCESS_TOKEN }}
+          path: .backend-ci
+
+      # Lets Nix's git fetcher resolve the private `backend-ci` flake input
+      # over HTTPS+token (the input URL is `git+ssh://...` for local dev).
       - name: Allow nix to fetch private backend-ci flake input
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
@@ -41,11 +55,11 @@ jobs:
           git config --global url."https://x-access-token:${ACCESS_TOKEN}@github.com/".insteadOf "ssh://git@github.com/"
 
       - name: Configure Nix
-        uses: Drafteame/backend-ci/.github/actions/configure-nix@v0.8.0
+        uses: ./.backend-ci/.github/actions/configure-nix
 
       - id: cz
         name: Create bump and changelog
-        uses: Drafteame/backend-ci/.github/actions/cz-bump@v0.8.0
+        uses: ./.backend-ci/.github/actions/cz-bump
         with:
           branch: main
           git-name: ${{ secrets.GIT_NAME }}
