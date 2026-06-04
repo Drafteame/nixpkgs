@@ -44,7 +44,10 @@ pkgs.runCommand "test-ejson"
   grep -q 'EJ\[1' "$TMPDIR/work/secret.ejson"
 
   decrypted=$(EJSON_KEYDIR="$TMPDIR/keys" ejson decrypt "$TMPDIR/work/secret.ejson")
-  echo "$decrypted" | grep -q '"value": "hello"'
+  [[ "$decrypted" == *'"value": "hello"'* ]] || {
+    echo "ERROR: decrypted payload missing expected value: $decrypted"
+    exit 1
+  }
 
   touch $out
 ''

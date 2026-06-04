@@ -23,7 +23,7 @@ pkgs.runCommand "test-go"
   echo "==> go version matches pin (${expectedVersion})"
   version=$(go version)
   echo "    got: $version"
-  echo "$version" | grep -q "go${expectedVersion} " || {
+  [[ "$version" == *"go${expectedVersion} "* ]] || {
     echo "ERROR: expected go${expectedVersion}, got: $version"
     exit 1
   }

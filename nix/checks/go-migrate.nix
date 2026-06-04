@@ -18,13 +18,17 @@ pkgs.runCommand "test-go-migrate"
   # migrate prints its version to stderr.
   version=$(migrate -version 2>&1)
   echo "    got: $version"
-  echo "$version" | grep -qE "(^|[^0-9])${expectedVersion}([^0-9]|$)" || {
+  [[ "$version" =~ (^|[^0-9])${expectedVersion}([^0-9]|$) ]] || {
     echo "ERROR: expected ${expectedVersion}, got: $version"
     exit 1
   }
 
   echo "==> migrate -help advertises the usage banner"
-  migrate -help 2>&1 | grep -q "Usage: migrate"
+  help_output=$(migrate -help 2>&1 || true)
+  [[ "$help_output" == *"Usage: migrate"* ]] || {
+    echo "ERROR: migrate -help did not show the usage banner"
+    exit 1
+  }
 
   touch $out
 ''

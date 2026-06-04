@@ -18,7 +18,7 @@ pkgs.runCommand "test-pkl"
   echo "==> pkl --version matches pin (${expectedVersion})"
   version=$(pkl --version)
   echo "    got: $version"
-  echo "$version" | grep -qE "(^|[^0-9])${expectedVersion}([^0-9]|$)" || {
+  [[ "$version" =~ (^|[^0-9])${expectedVersion}([^0-9]|$) ]] || {
     echo "ERROR: expected ${expectedVersion}, got: $version"
     exit 1
   }
@@ -31,8 +31,14 @@ pkgs.runCommand "test-pkl"
   EOF
   result=$(pkl eval "$TMPDIR/hello.pkl")
   echo "$result"
-  echo "$result" | grep -q 'greeting = "hello, world"'
-  echo "$result" | grep -qE 'numbers = (List\()?1, 2, 3'
+  [[ "$result" == *'greeting = "hello, world"'* ]] || {
+    echo "ERROR: greeting line missing from pkl output"
+    exit 1
+  }
+  [[ "$result" =~ numbers\ =\ (List\()?1,\ 2,\ 3 ]] || {
+    echo "ERROR: numbers list missing from pkl output"
+    exit 1
+  }
 
   touch $out
 ''

@@ -18,7 +18,7 @@ pkgs.runCommand "test-python"
     echo "==> python3 --version matches pin (${expectedVersion})"
     version=$(python3 --version 2>&1)
     echo "    got: $version"
-    echo "$version" | grep -q "Python ${expectedVersion}" || {
+    [[ "$version" == *"Python ${expectedVersion}"* ]] || {
       echo "ERROR: expected Python ${expectedVersion}, got: $version"
       exit 1
     }
