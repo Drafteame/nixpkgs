@@ -1,0 +1,66 @@
+## v0.0.1 (2026-06-15)
+
+
+- chore: bootstrap nix project with flake-parts, tests, and CI (#1)
+- * chore: bootstrap nix project with flake-parts, tests, and CI
+- Initial setup of the nixpkgs repository:
+- - flake.nix wired through flake-parts with nix/overlays, nix/packages,
+  nix/checks, and nix/shells modules
+- Five package derivations (ejson 1.5.4, go 1.26.4, go-migrate 4.19.1,
+  pkl 0.31.1, python 3.14.5+20260602) pinned to upstream binary releases
+  across aarch64-darwin, x86_64-darwin, aarch64-linux, x86_64-linux
+- Smoke-test derivation per package under nix/checks (binary on PATH,
+  version match, one functional assertion: ejson encrypt/decrypt round
+  trip, go build of stdlib-only program, migrate -help, pkl eval,
+  python stdlib + script execution)
+- Dev shell with nixpkgs-fmt, statix, deadnix, shellcheck, shfmt,
+  yamllint, markdownlint-cli2, gitleaks, commitizen, pre-commit; ci-deploy
+  re-exported from backend-ci v0.8.0 for the release workflow
+- pre-commit hooks for all linters + commitizen commit-msg check
+- pull_request workflow: cz commit/title check, full linter sweep,
+  nix flake check over every test derivation
+- release workflow: cz bump with backend-ci ci-deploy shell,
+  softprops/action-gh-release publish, floating v<major> tag update
+- Both workflows on blacksmith-2vcpu-ubuntu-2204 with
+  useblacksmith/checkout@v1, reusing Drafteame/backend-ci composite
+  actions (configure-nix, save-nix-cache, cz-bump) pinned to v0.8.0
+- Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+- * fix(ci): check out private backend-ci into workspace for action access
+- This repo is public; the auto-injected GITHUB_TOKEN cannot resolve
+composite actions from the private Drafteame/backend-ci. Workflow runs
+failed at action resolution with:
+-   Unable to resolve action 'drafteame/backend-ci', not found
+- Fix: check out backend-ci into .backend-ci/ using ACCESS_TOKEN and
+reference its actions via local paths (./.backend-ci/.github/actions/...)
+instead of org/repo@ref.
+- Side-effects:
+- - .yamllint.yaml and .markdownlintignore exclude .backend-ci/ so the
+  checkout doesn't get linted as part of this repo.
+- statix runs with --ignore '.backend-ci/**'; deadnix is scoped to
+  explicit paths (flake.nix nix) since neither accepts multiple
+  positional targets the same way.
+- The git URL rewrite step stays in place so Nix's flake fetcher can
+still resolve the backend-ci flake input over HTTPS+token at eval time
+(local dev keeps using the git+ssh URL).
+- Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+- * fix(checks): replace echo|grep -q with bash builtins to avoid SIGPIPE
+- ejson test failed on x86_64-linux with exit 141 (SIGPIPE). Root cause:
+-   echo "$decrypted" | grep -q '"value": "hello"'
+- With `set -o pipefail`, `grep -q` closes its stdin on the first match
+while `echo` is still writing — `echo` gets SIGPIPE and the pipeline
+exits 141. Manifests in the Linux sandbox but not on darwin due to
+buffering/timing differences.
+- All five tests had this pattern (version check + functional assertion).
+Switched to bash builtins:
+-   [[ "$var" == *"substring"* ]]
+  [[ "$var" =~ regex ]]
+- No pipe, no SIGPIPE, no pipefail interaction. Equivalent matching
+semantics. Also captured `migrate -help` output to a variable first so
+its `| grep -q "Usage"` pattern doesn't fall into the same trap.
+- Also fix markdownlint picking up .backend-ci/ — `.markdownlintignore`
+is not applied to paths matched by explicit CLI globs, so add a
+negation glob `'!.backend-ci/**'` to the workflow invocation.
+- Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+- ---------
+- Co-authored-by: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+- chore: seed repository
