@@ -1,0 +1,192 @@
+name: Pull Request
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: read
+  actions: write  # required by cache-nix-action's post-step in configure-nix
+
+concurrency:
+  group: pr-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  commit-check:
+    name: Validate commits
+    runs-on: blacksmith-2vcpu-ubuntu-2204
+    steps:
+      - uses: useblacksmith/checkout@v1
+        with:
+          fetch-depth: 0
+
+      # `Drafteame/backend-ci` is private; the auto-injected GITHUB_TOKEN of
+      # this public repo can't resolve its composite actions. Check the repo
+      # out into the workspace with an org-scoped PAT and reference the
+      # actions via local paths instead of `org/repo@ref`.
+      - name: Checkout backend-ci actions
+        uses: useblacksmith/checkout@v1
+        with:
+          repository: Drafteame/backend-ci
+          ref: v0.8.0
+          token: ${{ secrets.ACCESS_TOKEN }}
+          path: .backend-ci
+
+      # Lets Nix's git fetcher resolve the private `backend-ci` flake input
+      # over HTTPS+token (the input URL is `git+ssh://...` for local dev).
+      - name: Allow nix to fetch private backend-ci flake input
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        run: |
+          git config --global url."https://x-access-token:${ACCESS_TOKEN}@github.com/".insteadOf "ssh://git@github.com/"
+
+      - name: Configure Nix
+        uses: ./.backend-ci/.github/actions/configure-nix
+
+      - name: Warm dev shell
+        run: |
+          mkdir -p "$HOME/.cache/nix-profiles"
+          nix develop "$GITHUB_WORKSPACE#dev" \
+            --profile "$HOME/.cache/nix-profiles/dev" \
+            --command true
+
+      - name: cz check (PR commits)
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          nix develop "$GITHUB_WORKSPACE#dev" --command \
+            cz check --rev-range "origin/${BASE_REF}..HEAD"
+
+      - name: cz check (PR title)
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          nix develop "$GITHUB_WORKSPACE#dev" --command \
+            cz check -m "$PR_TITLE"
+
+  lint:
+    name: Lint
+    runs-on: blacksmith-2vcpu-ubuntu-2204
+    steps:
+      - uses: useblacksmith/checkout@v1
+        with:
+          fetch-depth: 0
+
+      - name: Checkout backend-ci actions
+        uses: useblacksmith/checkout@v1
+        with:
+          repository: Drafteame/backend-ci
+          ref: v0.8.0
+          token: ${{ secrets.ACCESS_TOKEN }}
+          path: .backend-ci
+
+      - name: Allow nix to fetch private backend-ci flake input
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        run: |
+          git config --global url."https://x-access-token:${ACCESS_TOKEN}@github.com/".insteadOf "ssh://git@github.com/"
+
+      - name: Configure Nix
+        uses: ./.backend-ci/.github/actions/configure-nix
+
+      - name: Warm dev shell
+        run: |
+          mkdir -p "$HOME/.cache/nix-profiles"
+          nix develop "$GITHUB_WORKSPACE#dev" \
+            --profile "$HOME/.cache/nix-profiles/dev" \
+            --command true
+
+      - name: nixpkgs-fmt --check
+        if: always()
+        run: |
+          nix develop "$GITHUB_WORKSPACE#dev" --command \
+            nixpkgs-fmt --check flake.nix nix
+
+      - name: statix check
+        if: always()
+        run: |
+          nix develop "$GITHUB_WORKSPACE#dev" --command \
+            statix check --ignore '.backend-ci/**'
+
+      - name: deadnix
+        if: always()
+        run: |
+          nix develop "$GITHUB_WORKSPACE#dev" --command \
+            deadnix --fail flake.nix nix
+
+      - name: shellcheck
+        if: always()
+        run: |
+          mapfile -t files < <(git ls-files '*.sh')
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "no shell scripts to check"
+            exit 0
+          fi
+          nix develop "$GITHUB_WORKSPACE#dev" --command \
+            shellcheck --source-path=SCRIPTDIR -x "${files[@]}"
+
+      - name: shfmt -d (format diff)
+        if: always()
+        run: |
+          mapfile -t files < <(git ls-files '*.sh')
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "no shell scripts to format"
+            exit 0
+          fi
+          nix develop "$GITHUB_WORKSPACE#dev" --command \
+            shfmt -i 2 -ci -d "${files[@]}"
+
+      - name: yamllint
+        if: always()
+        run: |
+          nix develop "$GITHUB_WORKSPACE#dev" --command \
+            yamllint -s .
+
+      - name: markdownlint
+        if: always()
+        run: |
+          # .markdownlintignore is NOT applied to paths matched by explicit
+          # CLI globs, so the .backend-ci/ checkout slips through unless we
+          # negate it on the command line too.
+          nix develop "$GITHUB_WORKSPACE#dev" --command \
+            markdownlint-cli2 '**/*.md' '!.backend-ci/**'
+
+      - name: gitleaks
+        if: always()
+        run: |
+          nix develop "$GITHUB_WORKSPACE#dev" --command \
+            gitleaks detect --redact --no-banner --source .
+
+  tests:
+    name: Nix tests
+    runs-on: blacksmith-2vcpu-ubuntu-2204
+    steps:
+      - uses: useblacksmith/checkout@v1
+
+      - name: Checkout backend-ci actions
+        uses: useblacksmith/checkout@v1
+        with:
+          repository: Drafteame/backend-ci
+          ref: v0.8.0
+          token: ${{ secrets.ACCESS_TOKEN }}
+          path: .backend-ci
+
+      - name: Allow nix to fetch private backend-ci flake input
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        run: |
+          git config --global url."https://x-access-token:${ACCESS_TOKEN}@github.com/".insteadOf "ssh://git@github.com/"
+
+      - name: Configure Nix
+        id: nix
+        uses: ./.backend-ci/.github/actions/configure-nix
+
+      - name: nix flake check
+        run: nix flake check --print-build-logs
+
+      - name: Save Nix store cache
+        if: always() && steps.nix.outputs.hit-primary-key != 'true'
+        uses: ./.backend-ci/.github/actions/save-nix-cache
+        with:
+          cache-key: ${{ steps.nix.outputs.primary-key }}

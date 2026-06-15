@@ -1,0 +1,6 @@
+CHANGELOG.md
+.direnv/
+.backend-ci/
+result
+result-*
+node_modules/

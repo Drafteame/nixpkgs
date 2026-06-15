@@ -1,0 +1,18 @@
+default: true
+
+# Allow long lines (tables, code references, URLs).
+MD013: false
+
+# Don't require a single H1 — some docs are fragments.
+MD041: false
+
+# Allow inline HTML (used in README badges, details/summary).
+MD033: false
+
+# Permit duplicate headings under different parents.
+MD024:
+  siblings_only: true
+
+# Don't enforce table column alignment — long URLs in cells make strict
+# pipe alignment cosmetic noise, not a readability win.
+MD060: false
