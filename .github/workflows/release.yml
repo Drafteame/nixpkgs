@@ -46,14 +46,6 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
           path: .backend-ci
 
-      # Lets Nix's git fetcher resolve the private `backend-ci` flake input
-      # over HTTPS+token (the input URL is `git+ssh://...` for local dev).
-      - name: Allow nix to fetch private backend-ci flake input
-        env:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        run: |
-          git config --global url."https://x-access-token:${ACCESS_TOKEN}@github.com/".insteadOf "ssh://git@github.com/"
-
       - name: Configure Nix
         uses: ./.backend-ci/.github/actions/configure-nix
 
@@ -65,7 +57,7 @@ jobs:
           git-name: ${{ secrets.GIT_NAME }}
           git-email: ${{ secrets.GIT_EMAIL }}
           changelog-increment-filename: body.md
-          devshell: ci-deploy
+          devshell: ci-release
 
       - name: Trim release body
         if: steps.cz.outputs.bumped == 'true'
