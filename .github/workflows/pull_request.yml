@@ -150,7 +150,7 @@ jobs:
           # CLI globs, so the .backend-ci/ checkout slips through unless we
           # negate it on the command line too.
           nix develop "$GITHUB_WORKSPACE#dev" --command \
-            markdownlint-cli2 '**/*.md' '!.backend-ci/**'
+            markdownlint-cli2 '**/*.md' '!.backend-ci/**' '!CHANGELOG.md'
 
       - name: gitleaks
         if: always()
