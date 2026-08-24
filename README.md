@@ -12,10 +12,10 @@ without committing build artifacts or trusting drift in upstream channels.
 
 | Package      | Version  | Source                                                                       |
 | ------------ | -------- | ---------------------------------------------------------------------------- |
-| `ejson`      | 1.5.4    | [Shopify/ejson](https://github.com/Shopify/ejson)                            |
-| `go`         | 1.26.4   | [go.dev/dl](https://go.dev/dl)                                               |
+| `ejson`      | 1.5.5    | [Shopify/ejson](https://github.com/Shopify/ejson)                            |
+| `go`         | 1.27.0   | [go.dev/dl](https://go.dev/dl)                                               |
 | `go-migrate` | 4.19.1   | [golang-migrate/migrate](https://github.com/golang-migrate/migrate)          |
-| `pkl`        | 0.31.1   | [apple/pkl](https://github.com/apple/pkl)                                    |
+| `pkl`        | 0.32.1   | [apple/pkl](https://github.com/apple/pkl)                                    |
 | `python`     | 3.14.5   | [astral-sh/python-build-standalone](https://github.com/astral-sh/python-build-standalone) |
 
 ## Consuming from another flake

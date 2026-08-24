@@ -1,24 +1,24 @@
 { pkgs }:
 
 let
-  version = "0.31.1";
+  version = "0.32.1";
 
   sources = {
     "aarch64-darwin" = {
       url = "https://github.com/apple/pkl/releases/download/${version}/pkl-macos-aarch64";
-      sha256 = "13qfrbkwcin5nshpij75xxrfy9zspcdp4c3mi9wx4k32v4w58shv";
+      sha256 = "1lyrq75dg84n4rr2c88z7189gvbmqr2xfkj64lv6mc90k8fbagjn";
     };
     "x86_64-darwin" = {
       url = "https://github.com/apple/pkl/releases/download/${version}/pkl-macos-amd64";
-      sha256 = "07a759m3f2lf2inrvc371zxb0fgc1dzzfsacqnlay0scmva3w4i2";
+      sha256 = "07rdgv95xbnjj7nmb0cfp7cnglhjvpmjqvzn8h0rcis04c1vjx2v";
     };
     "aarch64-linux" = {
       url = "https://github.com/apple/pkl/releases/download/${version}/pkl-linux-aarch64";
-      sha256 = "0gh85lzv3bm2kr5q2m8c4nzn5ww6d7nbkgg79awiz4ma7ms0xwby";
+      sha256 = "0n50vc8dzf10dn2gyxgvakm5jzkwyirp6d5h27wshdd4gpa2svd7";
     };
     "x86_64-linux" = {
       url = "https://github.com/apple/pkl/releases/download/${version}/pkl-linux-amd64";
-      sha256 = "1gri2bdm29wd77yvysmwkpa8r11mfv9a3jy9x2zsyp3mbnai73v1";
+      sha256 = "049jbzpg27xr9ccm67n22cj07yd8yk2vd6sfj0fss32wm4nvd01i";
     };
   };
 

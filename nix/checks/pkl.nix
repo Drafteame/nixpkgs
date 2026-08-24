@@ -2,7 +2,7 @@
 
 let
   pkl = self'.packages.pkl;
-  expectedVersion = "0.31.1";
+  expectedVersion = "0.32.1";
 in
 pkgs.runCommand "test-pkl"
 {
