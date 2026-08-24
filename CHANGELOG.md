@@ -1,3 +1,20 @@
+## v0.0.3 (2026-08-24)
+
+
+- deps: bump ejson to 1.5.5, go to 1.27.0 and pkl to 0.32.1 (#3)
+- * deps: bump ejson to 1.5.5, go to 1.27.0 and pkl to 0.32.1
+- Refresh the pinned upstream binary releases for three derivations, with
+platform hashes prefetched from the real release URLs for all four
+supported systems. go-migrate is already at its latest release (4.19.1)
+and is left untouched.
+- Version assertions in the go and pkl checks and the README package table
+are updated to match. The ejson check is version-agnostic so it needs no
+change.
+- Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
+- * chore: update flake.lock
+- ---------
+- Co-authored-by: Claude Opus 5 (1M context) <noreply@anthropic.com>
+
 ## v0.0.2 (2026-07-03)
 
 
