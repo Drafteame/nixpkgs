@@ -1,5 +1,5 @@
 {
-  description = "Draftea custom Nix derivations (go, python, ejson, pkl, golang-migrate, ...)";
+  description = "Draftea custom Nix derivations (go, python, ejson, pkl, golang-migrate, mockery, ...)";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
