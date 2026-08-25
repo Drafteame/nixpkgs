@@ -1,3 +1,18 @@
+## v0.1.0 (2026-08-25)
+
+
+- feat: add mockery derivation pinned to v3.7.4 (#4)
+- nixpkgs' go-mockery is still on the v2 line, even on unstable. Ship a
+custom derivation that fetches the official vektra/mockery v3.7.4
+release binaries for all four supported systems, following the same
+prebuilt-binary pattern as ejson and go-migrate.
+- The smoke test asserts the version pin, checks that the v3 command set
+is present (guards against a v2 binary), scaffolds a config with
+`mockery init`, and generates a mock for a local Go interface that must
+compile. It uses the matryer template so the generated code stays
+dependency-free and the compile step works inside the offline sandbox.
+- Co-authored-by: Claude Opus 5 (1M context) <noreply@anthropic.com>
+
 ## v0.0.3 (2026-08-24)
 
 
