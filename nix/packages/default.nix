@@ -7,9 +7,11 @@ _:
         ejson = import ./ejson.nix { inherit pkgs; };
         go = import ./go.nix { inherit pkgs; };
         go-migrate = import ./go-migrate.nix { inherit pkgs; };
+        golangci-lint = import ./golangci-lint.nix { inherit pkgs; };
         mockery = import ./mockery.nix { inherit pkgs; };
         pkl = import ./pkl.nix { inherit pkgs; };
         python = import ./python.nix { inherit pkgs; };
+        staticcheck = import ./staticcheck.nix { inherit pkgs; };
       };
     };
 }
