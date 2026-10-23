@@ -2,7 +2,7 @@
 
 let
   migrate = self'.packages.go-migrate;
-  expectedVersion = "4.19.1";
+  expectedVersion = "4.20.1";
 in
 pkgs.runCommand "test-go-migrate"
 {

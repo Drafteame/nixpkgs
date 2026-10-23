@@ -3,7 +3,7 @@
 let
   mockery = self'.packages.mockery;
   go = self'.packages.go;
-  expectedVersion = "3.7.4";
+  expectedVersion = "3.8.1";
 in
 pkgs.runCommand "test-mockery"
 {

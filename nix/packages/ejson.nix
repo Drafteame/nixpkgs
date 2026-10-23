@@ -1,24 +1,24 @@
 { pkgs }:
 
 let
-  version = "1.5.5";
+  version = "1.6.0";
 
   sources = {
     "aarch64-darwin" = {
       url = "https://github.com/Shopify/ejson/releases/download/v${version}/ejson_${version}_darwin_arm64.tar.gz";
-      sha256 = "1y417iyqvzb2ywwpk4qjab6da7nkqb1kn9hh7vz9plismzzr4mj7";
+      sha256 = "0rql809dn8a24z1bqdvg0ggalxhr42qjpiap8dpy9s19qzdwjhyd";
     };
     "x86_64-darwin" = {
       url = "https://github.com/Shopify/ejson/releases/download/v${version}/ejson_${version}_darwin_amd64.tar.gz";
-      sha256 = "01rviq7vsiyf7d4zbp7laschaq9nz5vc05l49h1k64jdkplrxcnl";
+      sha256 = "052g7csnbqy0x97g8374cin9g4qd52pn2db6y7y2f2k1d46czfa9";
     };
     "aarch64-linux" = {
       url = "https://github.com/Shopify/ejson/releases/download/v${version}/ejson_${version}_linux_arm64.tar.gz";
-      sha256 = "1qnyd2m159iw888n27qv6ikf3hd38hs5n04mqcchk93qd2az41zy";
+      sha256 = "0sxhs3a645bkwjvjvb1yrir6icm2w3w3yyznyaij5kdnjqnfg0sz";
     };
     "x86_64-linux" = {
       url = "https://github.com/Shopify/ejson/releases/download/v${version}/ejson_${version}_linux_amd64.tar.gz";
-      sha256 = "1ihdab0cwh9kffvlq12b33n7449v8bv8f8wsw7vpk0ca98ssjgnd";
+      sha256 = "08zhpkpd1wk2p7bz0dfh7r7m1wshaxhml8389bb2djsvq3h1fk9m";
     };
   };
 

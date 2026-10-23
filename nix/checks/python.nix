@@ -2,7 +2,7 @@
 
 let
   python = self'.packages.python;
-  expectedVersion = "3.14.5";
+  expectedVersion = "3.15.1";
 in
 pkgs.runCommand "test-python"
 {
@@ -26,7 +26,8 @@ pkgs.runCommand "test-python"
     echo "==> sys.version_info reports the pinned major.minor"
     python3 -c '
     import sys
-    assert sys.version_info[:3] == (3, 14, 5), sys.version_info
+    expected = tuple(int(p) for p in "${expectedVersion}".split("."))
+    assert sys.version_info[:3] == expected, sys.version_info
     print("sys.version_info OK:", sys.version_info)
     '
 
