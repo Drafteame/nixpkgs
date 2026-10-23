@@ -11,7 +11,10 @@ _:
         go-migrate = import ./go-migrate.nix { inherit pkgs self'; };
         golangci-lint = import ./golangci-lint.nix { inherit pkgs self'; };
         mockery = import ./mockery.nix { inherit pkgs self'; };
+        node = import ./node.nix { inherit pkgs self'; };
+        npm = import ./npm.nix { inherit pkgs self'; };
         pkl = import ./pkl.nix { inherit pkgs self'; };
+        pnpm = import ./pnpm.nix { inherit pkgs self'; };
         python = import ./python.nix { inherit pkgs self'; };
         staticcheck = import ./staticcheck.nix { inherit pkgs self'; };
       };

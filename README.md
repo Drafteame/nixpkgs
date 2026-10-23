@@ -1,6 +1,6 @@
 # nixpkgs
 
-Custom Nix derivations for tools (`go`, `python`, `ejson`, `pkl`, `golang-migrate`, `mockery`, `golangci-lint`, `staticcheck`, ...) consumable from
+Custom Nix derivations for tools (`go`, `python`, `ejson`, `pkl`, `golang-migrate`, `mockery`, `golangci-lint`, `staticcheck`, `node`, `npm`, `pnpm`, ...) consumable from
 [flake-parts](https://flake.parts/), [devenv](https://devenv.sh/), and other Nix-based setups.
 
 Each derivation pins a single upstream version and ships prebuilt binaries from the official release
@@ -17,7 +17,10 @@ without committing build artifacts or trusting drift in upstream channels.
 | `go-migrate` | 4.20.1   | [golang-migrate/migrate](https://github.com/golang-migrate/migrate)          |
 | `golangci-lint` | 2.15.0 | [golangci/golangci-lint](https://github.com/golangci/golangci-lint) |
 | `mockery`    | 3.8.1    | [vektra/mockery](https://github.com/vektra/mockery)                          |
+| `node`       | 26.12.1  | [nodejs.org/dist](https://nodejs.org/dist)                                   |
+| `npm`        | 11.20.0  | [npm/cli](https://github.com/npm/cli) (the copy bundled in the pinned Node release) |
 | `pkl`        | 0.32.2   | [apple/pkl](https://github.com/apple/pkl)                                    |
+| `pnpm`       | 12.15.0  | [pnpm/pnpm](https://github.com/pnpm/pnpm)                                    |
 | `python`     | 3.15.1   | [astral-sh/python-build-standalone](https://github.com/astral-sh/python-build-standalone) |
 | `staticcheck` | 2026.2.2 | [dominikh/go-tools](https://github.com/dominikh/go-tools) |
 
@@ -71,6 +74,37 @@ machines and CI.
 }
 ```
 
+## Node, npm and pnpm
+
+`node`, `npm` and `pnpm` are three separate packages so the package managers stay optional.
+`node` ships only the runtime; add `npm` and/or `pnpm` next to it when you need them.
+
+```nix
+packages = [
+  inputs.draftea-pkgs.packages.${system}.node
+  inputs.draftea-pkgs.packages.${system}.npm   # optional
+  inputs.draftea-pkgs.packages.${system}.pnpm  # optional
+];
+```
+
+Keep `node` in the list: globally installed tools use `#!/usr/bin/env node`.
+
+Global installs go outside the Nix store, so `npm install -g` and `pnpm add -g` work as usual:
+
+| Tool   | Global location        | Binaries on `PATH`          | Override                                  |
+| ------ | ---------------------- | --------------------------- | ----------------------------------------- |
+| `npm`  | `$HOME/.npm-global`    | `$HOME/.npm-global/bin`     | `NPM_CONFIG_PREFIX`, `prefix=` in `~/.npmrc` or a project `.npmrc` |
+| `pnpm` | `$HOME/.pnpm-global`   | `$HOME/.pnpm-global/bin`    | `PNPM_HOME`                               |
+
+`nix develop` / `nix-shell` add those `bin` directories to `PATH` automatically. For other
+consumers (devenv, home-manager, plain shells), add them yourself:
+
+```bash
+export PATH="$PATH:$HOME/.npm-global/bin:$HOME/.pnpm-global/bin"
+```
+
+The `npm` package is the copy bundled in the pinned Node release, so bump it together with `node`.
+
 ## Repository layout
 
 ```text
@@ -115,7 +149,10 @@ The tests cover, per package:
 | `go`         | version matches pin; `GOROOT` resolves; `go build` compiles a stdlib-only program   |
 | `go-migrate` | `migrate -version` matches pin; `migrate -help` advertises the usage banner         |
 | `mockery`    | version matches pin; v3 command set present; `init` scaffolds config; generates a mock that compiles |
+| `node`       | version matches pin; runs JavaScript; no bundled `npm`/`npx`/`corepack`; headers present |
+| `npm`        | version matches pin; global prefix is `$HOME/.npm-global` and overridable; `npm install -g` lands there and runs; setup hook adds it to `PATH` |
 | `pkl`        | `pkl --version` matches pin; `pkl eval` renders a minimal module                    |
+| `pnpm`       | version matches pin; global bin dir is `$HOME/.pnpm-global/bin` and overridable; `pnpm add -g` lands there and runs; setup hook adds it to `PATH` |
 | `python`     | version matches pin; `sys.version_info` correct; stdlib round trip; runs a script   |
 
 When updating a derivation, also update the `expectedVersion` in the corresponding
@@ -163,6 +200,11 @@ nixpkgs-fmt nix flake.nix
    ```
 
 3. Update the `expectedVersion` in `nix/checks/<name>.nix` to match.
+   - `node`: hashes come from `https://nodejs.org/dist/v<version>/SHASUMS256.txt`. Also set
+     `version` in `nix/packages/npm.nix` to the npm bundled in that release
+     (`curl -s https://nodejs.org/dist/index.json`) and update the `npm` check.
+   - `pnpm`: hashes come from the release asset digests
+     (`gh api repos/pnpm/pnpm/releases/tags/v<version> --jq '.assets[] | .name + " " + .digest'`).
 4. `nix build .#<name>` on at least one local platform, then `nix flake check` to run the suite.
 5. Commit with a [Conventional Commits](https://www.conventionalcommits.org/) message — `deps`
    or `build` scope is appropriate for upstream bumps.
