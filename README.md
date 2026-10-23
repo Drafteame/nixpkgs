@@ -1,6 +1,6 @@
 # nixpkgs
 
-Custom Nix derivations for tools (`go`, `python`, `ejson`, `pkl`, `golang-migrate`, `mockery`, ...) consumable from
+Custom Nix derivations for tools (`go`, `python`, `ejson`, `pkl`, `golang-migrate`, `mockery`, `golangci-lint`, `staticcheck`, ...) consumable from
 [flake-parts](https://flake.parts/), [devenv](https://devenv.sh/), and other Nix-based setups.
 
 Each derivation pins a single upstream version and ships prebuilt binaries from the official release
@@ -15,9 +15,11 @@ without committing build artifacts or trusting drift in upstream channels.
 | `ejson`      | 1.5.5    | [Shopify/ejson](https://github.com/Shopify/ejson)                            |
 | `go`         | 1.27.0   | [go.dev/dl](https://go.dev/dl)                                               |
 | `go-migrate` | 4.19.1   | [golang-migrate/migrate](https://github.com/golang-migrate/migrate)          |
+| `golangci-lint` | 2.15.0 | [golangci/golangci-lint](https://github.com/golangci/golangci-lint) |
 | `mockery`    | 3.7.4    | [vektra/mockery](https://github.com/vektra/mockery)                          |
 | `pkl`        | 0.32.1   | [apple/pkl](https://github.com/apple/pkl)                                    |
 | `python`     | 3.14.5   | [astral-sh/python-build-standalone](https://github.com/astral-sh/python-build-standalone) |
+| `staticcheck` | 2026.2.2 | [dominikh/go-tools](https://github.com/dominikh/go-tools) |
 
 ## Consuming from another flake
 
