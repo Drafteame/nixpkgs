@@ -1,3 +1,8 @@
+## v0.2.0 (2026-10-23)
+
+
+- feat: add golangci-lint and staticcheck derivations pinned to 2.15.0 and 2026.2.2 (#5)
+
 ## v0.1.0 (2026-08-25)
 
 
