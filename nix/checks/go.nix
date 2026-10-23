@@ -2,7 +2,7 @@
 
 let
   go = self'.packages.go;
-  expectedVersion = "1.27.0";
+  expectedVersion = "1.27.3";
 in
 pkgs.runCommand "test-go"
 {

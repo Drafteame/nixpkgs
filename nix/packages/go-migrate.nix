@@ -1,24 +1,24 @@
 { pkgs }:
 
 let
-  version = "4.19.1";
+  version = "4.20.1";
 
   sources = {
     "aarch64-darwin" = {
       url = "https://github.com/golang-migrate/migrate/releases/download/v${version}/migrate.darwin-arm64.tar.gz";
-      sha256 = "0s1la18qgrhbzvlg1zy1xclhq5ax4z97zdz8g0yckhnimxbqdk58";
+      sha256 = "1hh64mjz66dm3w8q59v30qd42l8w9jirkvzh529xmgmn3vj8fvyn";
     };
     "x86_64-darwin" = {
       url = "https://github.com/golang-migrate/migrate/releases/download/v${version}/migrate.darwin-amd64.tar.gz";
-      sha256 = "1x70jz9579nfsc44cy4yffjjlcl2g4lsmw26r1lb7a9gg78xa470";
+      sha256 = "12gfbysg9swv1wjafyfi7gagvv39fymbbbjyk3i5msmzdxsw7dxc";
     };
     "aarch64-linux" = {
       url = "https://github.com/golang-migrate/migrate/releases/download/v${version}/migrate.linux-arm64.tar.gz";
-      sha256 = "1iaihw2yklbb86v20jspb5h726mda74p315ryk1prw7kq1aj9sig";
+      sha256 = "0q4g9ffhw1x8idsa7g1gzb87qmkahp8j08b00gz6hnskpbcp1sh3";
     };
     "x86_64-linux" = {
       url = "https://github.com/golang-migrate/migrate/releases/download/v${version}/migrate.linux-amd64.tar.gz";
-      sha256 = "066fqzsccc1nax8gqy93w9qqy5qjcbwkrcx7nndbc9xis7xliiia";
+      sha256 = "1m0v5qcrnpnn5hzy6nky1wwk5dsp5nkdqagvm427i2qpshhk3qdi";
     };
   };
 

@@ -1,24 +1,24 @@
 { pkgs }:
 
 let
-  version = "3.7.4";
+  version = "3.8.1";
 
   sources = {
     "aarch64-darwin" = {
       url = "https://github.com/vektra/mockery/releases/download/v${version}/mockery_${version}_Darwin_arm64.tar.gz";
-      sha256 = "0y2g20z2gkpr69vgm2f4g02n1vfqz8kxc77192fn4dnqp5dky16p";
+      sha256 = "0d2h5lxdasrf6yqxf41fihkr9gvlz5b71hx0gnrhcf94hi27jfih";
     };
     "x86_64-darwin" = {
       url = "https://github.com/vektra/mockery/releases/download/v${version}/mockery_${version}_Darwin_x86_64.tar.gz";
-      sha256 = "1pskh16pp1qgb03g3c75qk6m0vqcv25nzxvwg3x12p437niahnr8";
+      sha256 = "0vya6balkglapq9n8lwnm09h46ip04mh9kjd625jcip98h9k70k8";
     };
     "aarch64-linux" = {
       url = "https://github.com/vektra/mockery/releases/download/v${version}/mockery_${version}_Linux_arm64.tar.gz";
-      sha256 = "0jvchbzr9c96mm5sngvix41d0j37mld4b3sbxqynr9xdyng1yngy";
+      sha256 = "0lpljqv9a4aqinahhxfxlnrrl47f7192dnk5mp9qv1p9lvrq3x6i";
     };
     "x86_64-linux" = {
       url = "https://github.com/vektra/mockery/releases/download/v${version}/mockery_${version}_Linux_x86_64.tar.gz";
-      sha256 = "0dvk1wpvzqwpcly16a01ggzzr2vah88kiadmiavn4hla4cpgbvnm";
+      sha256 = "0ap759nyh971s82c8j9vffdpxwmvz352fpsr3j5kkmldnlw7sg4m";
     };
   };
 

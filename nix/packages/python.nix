@@ -2,25 +2,25 @@
 
 let
   inherit (pkgs) lib;
-  version = "3.14.5";
-  release = "20260602";
+  version = "3.15.1";
+  release = "20261021";
 
   sources = {
     "aarch64-darwin" = {
       url = "https://github.com/astral-sh/python-build-standalone/releases/download/${release}/cpython-${version}+${release}-aarch64-apple-darwin-install_only.tar.gz";
-      sha256 = "09ww67gpc9j3l1xf0i3mkq3ibia14d0l9xgkq0b5v7iaasdrq8gk";
+      sha256 = "0cczcq57f666bhdv17yhppvg30ljkh66mxj0qgs8bgjg42gc44vq";
     };
     "x86_64-darwin" = {
       url = "https://github.com/astral-sh/python-build-standalone/releases/download/${release}/cpython-${version}+${release}-x86_64-apple-darwin-install_only.tar.gz";
-      sha256 = "1yx9gnbv85fwbnm9qdrm7siac6mcfl22dl10hs6qzk6wsrz8hddf";
+      sha256 = "1li3hmw8sgfsfgra59dc2aavjwgs3s4yjvk39z943pryy38bdn47";
     };
     "aarch64-linux" = {
       url = "https://github.com/astral-sh/python-build-standalone/releases/download/${release}/cpython-${version}+${release}-aarch64-unknown-linux-gnu-install_only.tar.gz";
-      sha256 = "0pmfwsd345v5h43jjqsjnqpv9bpi21nrirlq6ff30105232wqxn2";
+      sha256 = "1hbg4kpxqkppm79z69806apj5xwhqqiaj2qvlc8c7rl68x28yqwy";
     };
     "x86_64-linux" = {
       url = "https://github.com/astral-sh/python-build-standalone/releases/download/${release}/cpython-${version}+${release}-x86_64-unknown-linux-gnu-install_only.tar.gz";
-      sha256 = "13ykql2kcwk717rs26pwaqf6i4sn4rq31yidb87430izbrhc2b4n";
+      sha256 = "045prn0rmsszyrwdkg6wyhn44iiizizsxp1991pw04dnh25mm1v7";
     };
   };
 
