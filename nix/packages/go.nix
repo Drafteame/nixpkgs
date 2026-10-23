@@ -2,7 +2,7 @@
 
 let
   inherit (pkgs) lib;
-  version = "1.27.0";
+  version = "1.27.3";
 
   # Platform-specific SRI hashes for the official prebuilt tarball from
   # https://go.dev/dl/. To refresh, run:
@@ -11,19 +11,19 @@ let
   platforms = {
     "aarch64-darwin" = {
       suffix = "darwin-arm64";
-      hash = "sha256-kEk7O71eEPkdEhUxmL8ZlP11Y5m0/sk7SbDG4qze6z4=";
+      hash = "sha256-3TkIzyCVnXmMHgbr5bciE/BQXOATc7QM4xEJdabNmcI=";
     };
     "x86_64-darwin" = {
       suffix = "darwin-amd64";
-      hash = "sha256-0zFOJUluQ4HXGlxR0pB+evZV0Zn2eAtUnwFb2F/vSYY=";
+      hash = "sha256-tvjpMeSrSX/N5tqK5EmaWPnSWOVcioCCSlFurllQp1A=";
     };
     "aarch64-linux" = {
       suffix = "linux-arm64";
-      hash = "sha256-UXmNLELQ4cbtf9n0hyi0GTq6yeiq1tusL+lqgfWQm9o=";
+      hash = "sha256-oG6ZMJ28vcoajM0igsPuFG5VkwiG4mtPEZMmlYcWX0k=";
     };
     "x86_64-linux" = {
       suffix = "linux-amd64";
-      hash = "sha256-Z1wmxEnLsY/CS3RlDeHqu65uFvZDJv2FooP7O1goBoU=";
+      hash = "sha256-Ze+8gP3B+izSYxytW0gXd6aOhyXzTon1D8ascU43m0A=";
     };
   };
 
