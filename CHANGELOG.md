@@ -1,3 +1,38 @@
+## v0.3.0 (2026-10-23)
+
+
+- feat: add node, npm and pnpm derivations (#6)
+- * deps: bump go to 1.27.3
+- Update the pinned Go toolchain from 1.27.0 to 1.27.3 for all four
+supported systems and refresh the platform SRI hashes from the official
+go.dev release tarballs. The smoke check's expectedVersion follows the pin.
+- Co-Authored-By: Claude Haiku 5.5 <noreply@anthropic.com>
+- * deps: bump ejson, go-migrate, mockery, pkl and python to latest
+- Update ejson to 1.6.0, go-migrate to 4.20.1, mockery to 3.8.1, pkl to
+0.32.2 and python to 3.15.1 (python-build-standalone 20261021). Platform
+hashes are refreshed from the upstream release assets.
+- The python smoke check now derives its sys.version_info assertion from
+expectedVersion instead of a hardcoded tuple, so future bumps need one edit.
+- Co-Authored-By: Claude Haiku 5.5 <noreply@anthropic.com>
+- * feat: add node, npm and pnpm derivations
+- Add a node derivation pinned to 26.12.1 from the official nodejs.org
+release tarballs for the four supported systems. It ships the runtime
+only: the bundled npm, npx and corepack are removed so the package
+managers stay optional.
+- Add npm (the copy bundled in the pinned node release) and pnpm (the
+official standalone release binary) as separate packages. Their global
+installs live outside the nix store: npm defaults its prefix to
+$HOME/.npm-global through a builtin npmrc, and pnpm defaults PNPM_HOME
+to $HOME/.pnpm-global. Both can be overridden through their usual
+environment variables and ship a setup hook that puts the global bin
+directory on PATH.
+- Each package has a smoke check that installs a real global package and
+verifies the location, the override and the PATH hook. README documents
+usage and the bump procedure.
+- Co-Authored-By: Claude Haiku 5.5 <noreply@anthropic.com>
+- ---------
+- Co-authored-by: Claude Haiku 5.5 <noreply@anthropic.com>
+
 ## v0.2.0 (2026-10-23)
 
 
