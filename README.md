@@ -105,9 +105,10 @@ export PATH="$PATH:$HOME/.npm-global/bin:$HOME/.pnpm-global/bin"
 
 The `npm` package is the copy bundled in the pinned Node release, so bump it together with `node`.
 
-`node` stays on the 24 LTS line on purpose: Serverless Framework v3 runs on `aws-sdk` v2, whose
-HTTP response handling never completes on Node 26, so every `sls` call to AWS hangs. Move the pin
-to 26 once the services run on Serverless v4 (AWS SDK v3).
+`node` is pinned to the 24 LTS line on purpose. Serverless Framework v3, which every service deploys
+with, runs on `aws-sdk` v2. On Node 26 that SDK never consumes the HTTP response: the connection
+opens and AWS answers, but the callback is never invoked, so every `sls` call to AWS hangs. Node 24
+is also the version CI runs on.
 
 ## Repository layout
 
