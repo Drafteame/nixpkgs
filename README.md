@@ -17,8 +17,8 @@ without committing build artifacts or trusting drift in upstream channels.
 | `go-migrate` | 4.20.1   | [golang-migrate/migrate](https://github.com/golang-migrate/migrate)          |
 | `golangci-lint` | 2.15.0 | [golangci/golangci-lint](https://github.com/golangci/golangci-lint) |
 | `mockery`    | 3.8.1    | [vektra/mockery](https://github.com/vektra/mockery)                          |
-| `node`       | 26.12.1  | [nodejs.org/dist](https://nodejs.org/dist)                                   |
-| `npm`        | 11.20.0  | [npm/cli](https://github.com/npm/cli) (the copy bundled in the pinned Node release) |
+| `node`       | 24.22.2  | [nodejs.org/dist](https://nodejs.org/dist)                                   |
+| `npm`        | 11.19.1  | [npm/cli](https://github.com/npm/cli) (the copy bundled in the pinned Node release) |
 | `pkl`        | 0.32.2   | [apple/pkl](https://github.com/apple/pkl)                                    |
 | `pnpm`       | 12.15.0  | [pnpm/pnpm](https://github.com/pnpm/pnpm)                                    |
 | `python`     | 3.15.1   | [astral-sh/python-build-standalone](https://github.com/astral-sh/python-build-standalone) |
@@ -104,6 +104,10 @@ export PATH="$PATH:$HOME/.npm-global/bin:$HOME/.pnpm-global/bin"
 ```
 
 The `npm` package is the copy bundled in the pinned Node release, so bump it together with `node`.
+
+`node` stays on the 24 LTS line on purpose: Serverless Framework v3 runs on `aws-sdk` v2, whose
+HTTP response handling never completes on Node 26, so every `sls` call to AWS hangs. Move the pin
+to 26 once the services run on Serverless v4 (AWS SDK v3).
 
 ## Repository layout
 
