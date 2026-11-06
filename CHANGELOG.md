@@ -1,3 +1,22 @@
+## v0.3.1 (2026-11-06)
+
+
+- deps: pin node to 24.22.2 LTS and python to 3.14.9 (#7)
+- * deps: pin node to 24.22.2 LTS and npm to 11.19.1
+- Serverless Framework v3 depends on aws-sdk v2, which never consumes the
+HTTP response on Node 26, so every sls call to AWS hangs. Node 24 is
+also what backend-ci already uses in CI.
+- Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
+- * docs: explain the node 24 pin without a migration note
+- * deps: pin python to 3.14.9
+- 3.15 is too recent for the ecosystem: several dependencies of the
+deploy scripts have no 3.15 wheels yet, so uv builds them from source
+in every shell. 3.14 is also what CI runs. Same python-build-standalone
+release (20261021), only the version and hashes change.
+- Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
+- ---------
+- Co-authored-by: Claude Fable 5.1 <noreply@anthropic.com>
+
 ## v0.3.0 (2026-10-23)
 
 
