@@ -17,11 +17,11 @@ without committing build artifacts or trusting drift in upstream channels.
 | `go-migrate` | 4.20.1   | [golang-migrate/migrate](https://github.com/golang-migrate/migrate)          |
 | `golangci-lint` | 2.15.0 | [golangci/golangci-lint](https://github.com/golangci/golangci-lint) |
 | `mockery`    | 3.8.1    | [vektra/mockery](https://github.com/vektra/mockery)                          |
-| `node`       | 26.12.1  | [nodejs.org/dist](https://nodejs.org/dist)                                   |
-| `npm`        | 11.20.0  | [npm/cli](https://github.com/npm/cli) (the copy bundled in the pinned Node release) |
+| `node`       | 24.22.2  | [nodejs.org/dist](https://nodejs.org/dist)                                   |
+| `npm`        | 11.19.1  | [npm/cli](https://github.com/npm/cli) (the copy bundled in the pinned Node release) |
 | `pkl`        | 0.32.2   | [apple/pkl](https://github.com/apple/pkl)                                    |
 | `pnpm`       | 12.15.0  | [pnpm/pnpm](https://github.com/pnpm/pnpm)                                    |
-| `python`     | 3.15.1   | [astral-sh/python-build-standalone](https://github.com/astral-sh/python-build-standalone) |
+| `python`     | 3.14.9   | [astral-sh/python-build-standalone](https://github.com/astral-sh/python-build-standalone) |
 | `staticcheck` | 2026.2.2 | [dominikh/go-tools](https://github.com/dominikh/go-tools) |
 
 ## Consuming from another flake
@@ -74,6 +74,12 @@ machines and CI.
 }
 ```
 
+## Python
+
+`python` is pinned to the 3.14 line on purpose. 3.15 is too recent for the ecosystem: several
+dependencies of the deploy scripts (`pyyaml` among them) do not publish 3.15 wheels yet, so `uv`
+has to build them from source in every shell. 3.14 is also the version CI runs on.
+
 ## Node, npm and pnpm
 
 `node`, `npm` and `pnpm` are three separate packages so the package managers stay optional.
@@ -104,6 +110,11 @@ export PATH="$PATH:$HOME/.npm-global/bin:$HOME/.pnpm-global/bin"
 ```
 
 The `npm` package is the copy bundled in the pinned Node release, so bump it together with `node`.
+
+`node` is pinned to the 24 LTS line on purpose. Serverless Framework v3, which every service deploys
+with, runs on `aws-sdk` v2. On Node 26 that SDK never consumes the HTTP response: the connection
+opens and AWS answers, but the callback is never invoked, so every `sls` call to AWS hangs. Node 24
+is also the version CI runs on.
 
 ## Repository layout
 

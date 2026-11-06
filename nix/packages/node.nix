@@ -2,26 +2,26 @@
 
 let
   inherit (pkgs) lib;
-  version = "26.12.1";
+  version = "24.22.2";
 
   # sha256 hashes come from https://nodejs.org/dist/v${version}/SHASUMS256.txt
   # (hex is accepted by fetchurl as-is).
   platforms = {
     "aarch64-darwin" = {
       suffix = "darwin-arm64";
-      sha256 = "1901d539912c02afa10d1cc126943a8855a7eedebe830119463470db5e6c59e8";
+      sha256 = "aa9549349e47dffaa42dcf95d6e06ade8c4bdafc980979883b88767670df385a";
     };
     "x86_64-darwin" = {
       suffix = "darwin-x64";
-      sha256 = "b85c2ea4420ad0bc4abf2dc6cf1f55130ed681f1cabf60cf3f526e4c9e2712ff";
+      sha256 = "d5e336d588c45be0c37dbd52cc29895593009ca4997a77a1fd02815131ed0e52";
     };
     "aarch64-linux" = {
       suffix = "linux-arm64";
-      sha256 = "a6c01af459dd8972ab3fb08ee5da81244d26ba8c4944a62d5bbba8c597ae154f";
+      sha256 = "95c264150aceb7f3437a29fd6984924f5f8d1511ea3cbd6c508b83f6c555dae2";
     };
     "x86_64-linux" = {
       suffix = "linux-x64";
-      sha256 = "0fd1eb7770598f52a21995edf6ed35fc690400fa437c2386af329519e9143132";
+      sha256 = "361718c444e49af2ca5a110c83ba6a8901143f23ab285ebbef0341f391f482a9";
     };
   };
 

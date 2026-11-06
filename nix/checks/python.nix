@@ -2,7 +2,7 @@
 
 let
   python = self'.packages.python;
-  expectedVersion = "3.15.1";
+  expectedVersion = "3.14.9";
 in
 pkgs.runCommand "test-python"
 {

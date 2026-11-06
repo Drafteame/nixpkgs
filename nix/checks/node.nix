@@ -2,7 +2,7 @@
 
 let
   node = self'.packages.node;
-  expectedVersion = "26.12.1";
+  expectedVersion = "24.22.2";
 in
 pkgs.runCommand "test-node"
 {

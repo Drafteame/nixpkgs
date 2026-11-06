@@ -3,7 +3,7 @@
 let
   node = self'.packages.node;
   npm = self'.packages.npm;
-  expectedVersion = "11.20.0";
+  expectedVersion = "11.19.1";
 in
 pkgs.runCommand "test-npm"
 {

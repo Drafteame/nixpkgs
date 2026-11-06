@@ -4,7 +4,7 @@ let
   inherit (pkgs) lib;
 
   # npm bundled in the pinned node release (see node.nix); bump together.
-  version = "11.20.0";
+  version = "11.19.1";
 
   # Setup hooks run while the environment is built (HOME=/homeless-shelter) and
   # `nix develop` restores the real HOME afterwards, so the PATH update is also
