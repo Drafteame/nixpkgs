@@ -1,6 +1,6 @@
 # nixpkgs
 
-Custom Nix derivations for tools (`go`, `python`, `ejson`, `pkl`, `golang-migrate`, `mockery`, `golangci-lint`, `staticcheck`, `node`, `npm`, `pnpm`, ...) consumable from
+Custom Nix derivations for tools (`go`, `python`, `ejson`, `pkl`, `golang-migrate`, `goimports-reviser`, `mockery`, `golangci-lint`, `staticcheck`, `node`, `npm`, `pnpm`, ...) consumable from
 [flake-parts](https://flake.parts/), [devenv](https://devenv.sh/), and other Nix-based setups.
 
 Each derivation pins a single upstream version and ships prebuilt binaries from the official release
@@ -15,6 +15,7 @@ without committing build artifacts or trusting drift in upstream channels.
 | `ejson`      | 1.6.0    | [Shopify/ejson](https://github.com/Shopify/ejson)                            |
 | `go`         | 1.27.3   | [go.dev/dl](https://go.dev/dl)                                               |
 | `go-migrate` | 4.20.1   | [golang-migrate/migrate](https://github.com/golang-migrate/migrate)          |
+| `goimports-reviser` | 3.13.2 | [incu6us/goimports-reviser](https://github.com/incu6us/goimports-reviser) |
 | `golangci-lint` | 2.15.0 | [golangci/golangci-lint](https://github.com/golangci/golangci-lint) |
 | `mockery`    | 3.8.1    | [vektra/mockery](https://github.com/vektra/mockery)                          |
 | `node`       | 24.22.2  | [nodejs.org/dist](https://nodejs.org/dist)                                   |
