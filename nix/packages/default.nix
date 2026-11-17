@@ -10,6 +10,7 @@ _:
         ejson = import ./ejson.nix { inherit pkgs; };
         go = import ./go.nix { inherit pkgs; };
         go-migrate = import ./go-migrate.nix { inherit pkgs; };
+        goimports-reviser = import ./goimports-reviser.nix { inherit pkgs; };
         golangci-lint = import ./golangci-lint.nix { inherit pkgs; };
         mockery = import ./mockery.nix { inherit pkgs; };
         inherit node;
