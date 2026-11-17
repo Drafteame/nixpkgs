@@ -1,3 +1,10 @@
+## v0.4.0 (2026-11-17)
+
+
+- feat: add the pinned goimports-reviser 3.13.2 release package [DEV-781] (#8)
+- * feat(goimports-reviser): add the pinned 3.13.2 release package
+- * style(goimports-reviser): format the check with nixpkgs-fmt
+
 ## v0.3.1 (2026-11-06)
 
 
