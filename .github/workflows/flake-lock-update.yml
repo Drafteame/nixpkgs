@@ -1,0 +1,42 @@
+name: Weekly flake.lock update
+
+on:
+  schedule:
+    # Monday 06:00 UTC
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: Update flake.lock
+    runs-on: blacksmith-2vcpu-ubuntu-2204
+    steps:
+      - uses: useblacksmith/checkout@v1
+
+      # Same installer as backend-ci's `configure-nix`, without its store
+      # cache: `nix flake update` only fetches inputs and builds nothing.
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+
+      # ACCESS_TOKEN opens the PR so its CI runs (a GITHUB_TOKEN PR does not
+      # trigger workflows). The fixed branch keeps a single PR, updated in
+      # place while it stays open.
+      - name: Update flake.lock
+        uses: DeterminateSystems/update-flake-lock@v29
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+          nix-options: --option access-tokens github.com=${{ secrets.ACCESS_TOKEN }}
+          branch: chore/flake-lock-update
+          commit-msg: 'chore: weekly flake.lock update'
+          pr-title: 'chore: weekly flake.lock update'
+          pr-labels: |
+            dependencies
+            nix
