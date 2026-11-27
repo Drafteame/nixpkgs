@@ -6,12 +6,14 @@ _:
       # Each check is a derivation that builds only if its assertions pass.
       # Runs via `nix flake check` or `nix build .#checks.<system>.<name>`.
       checks = {
+        draft = import ./draft.nix { inherit pkgs self'; };
         ejson = import ./ejson.nix { inherit pkgs self'; };
         go = import ./go.nix { inherit pkgs self'; };
         go-migrate = import ./go-migrate.nix { inherit pkgs self'; };
         goimports-reviser = import ./goimports-reviser.nix { inherit pkgs self'; };
         golangci-lint = import ./golangci-lint.nix { inherit pkgs self'; };
         mockery = import ./mockery.nix { inherit pkgs self'; };
+        modcheck = import ./modcheck.nix { inherit pkgs self'; };
         node = import ./node.nix { inherit pkgs self'; };
         npm = import ./npm.nix { inherit pkgs self'; };
         pkl = import ./pkl.nix { inherit pkgs self'; };
