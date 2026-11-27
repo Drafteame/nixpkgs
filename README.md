@@ -1,6 +1,6 @@
 # nixpkgs
 
-Custom Nix derivations for tools (`go`, `python`, `ejson`, `pkl`, `golang-migrate`, `goimports-reviser`, `mockery`, `golangci-lint`, `staticcheck`, `node`, `npm`, `pnpm`, ...) consumable from
+Custom Nix derivations for tools (`draft`, `modcheck`, `go`, `python`, `ejson`, `pkl`, `golang-migrate`, `goimports-reviser`, `mockery`, `golangci-lint`, `staticcheck`, `node`, `npm`, `pnpm`, ...) consumable from
 [flake-parts](https://flake.parts/), [devenv](https://devenv.sh/), and other Nix-based setups.
 
 Each derivation pins a single upstream version and ships prebuilt binaries from the official release
@@ -12,12 +12,14 @@ without committing build artifacts or trusting drift in upstream channels.
 
 | Package      | Version  | Source                                                                       |
 | ------------ | -------- | ---------------------------------------------------------------------------- |
+| `draft`      | 1.28.0   | [Drafteame/draft](https://github.com/Drafteame/draft)                            |
 | `ejson`      | 1.6.0    | [Shopify/ejson](https://github.com/Shopify/ejson)                            |
 | `go`         | 1.27.3   | [go.dev/dl](https://go.dev/dl)                                               |
 | `go-migrate` | 4.20.1   | [golang-migrate/migrate](https://github.com/golang-migrate/migrate)          |
 | `goimports-reviser` | 3.13.2 | [incu6us/goimports-reviser](https://github.com/incu6us/goimports-reviser) |
 | `golangci-lint` | 2.15.0 | [golangci/golangci-lint](https://github.com/golangci/golangci-lint) |
 | `mockery`    | 3.8.1    | [vektra/mockery](https://github.com/vektra/mockery)                          |
+| `modcheck`   | 0.2.1    | [Drafteame/modcheck](https://github.com/Drafteame/modcheck)                      |
 | `node`       | 24.22.2  | [nodejs.org/dist](https://nodejs.org/dist)                                   |
 | `npm`        | 11.19.1  | [npm/cli](https://github.com/npm/cli) (the copy bundled in the pinned Node release) |
 | `pkl`        | 0.32.2   | [apple/pkl](https://github.com/apple/pkl)                                    |
@@ -157,10 +159,12 @@ The tests cover, per package:
 
 | Package      | Coverage                                                                            |
 | ------------ | ----------------------------------------------------------------------------------- |
+| `draft`      | version matches pin; `--help` lists the `new:service` / `new:lambda` scaffolding commands |
 | `ejson`      | `keygen` produces a 32-byte Curve25519 keypair; full `encrypt`/`decrypt` round trip |
 | `go`         | version matches pin; `GOROOT` resolves; `go build` compiles a stdlib-only program   |
 | `go-migrate` | `migrate -version` matches pin; `migrate -help` advertises the usage banner         |
 | `mockery`    | version matches pin; v3 command set present; `init` scaffolds config; generates a mock that compiles |
+| `modcheck`   | version matches pin; `--help` advertises the usage banner                           |
 | `node`       | version matches pin; runs JavaScript; no bundled `npm`/`npx`/`corepack`; headers present |
 | `npm`        | version matches pin; global prefix is `$HOME/.npm-global` and overridable; `npm install -g` lands there and runs; setup hook adds it to `PATH` |
 | `pkl`        | `pkl --version` matches pin; `pkl eval` renders a minimal module                    |
