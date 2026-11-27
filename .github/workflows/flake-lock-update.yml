@@ -37,6 +37,14 @@ jobs:
           branch: chore/flake-lock-update
           commit-msg: 'chore: weekly flake.lock update'
           pr-title: 'chore: weekly flake.lock update'
+          # The action's default body adds a note about re-opening the PR to
+          # run CI, which does not apply here: ACCESS_TOKEN already triggers it.
+          pr-body: |
+            Automated changes by the [update-flake-lock](https://github.com/DeterminateSystems/update-flake-lock) GitHub Action.
+
+            ```
+            {{ env.GIT_COMMIT_MESSAGE }}
+            ```
           pr-labels: |
             dependencies
             nix
